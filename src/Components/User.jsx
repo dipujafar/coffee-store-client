@@ -1,9 +1,37 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const User = () => {
   const loadedUsers = useLoaderData();
   let [users, setUsers] = useState(loadedUsers);
+  // User remove function
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be delete this user!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/user/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            const remaining = users.filter((user) => user._id !== id);
+            setUsers(remaining);
+            if (data.deletedCount > 0) {
+              Swal.fire("Deleted!", "The User has been deleted.", "success");
+            }
+          });
+      }
+    });
+  };
   return (
     <div>
       <h1>Users {loadedUsers.length}</h1>
@@ -25,9 +53,14 @@ const User = () => {
                 <th>1</th>
                 <td>{user.email}</td>
                 <td>{user?.createdAt}</td>
-                <td></td>
+                <td>{user?.lastLoggedAt}</td>
                 <td>
-                  <button className="btn btn-outline btn-error">X</button>
+                  <button
+                    onClick={() => handleDelete(user._id)}
+                    className="btn btn-outline btn-error"
+                  >
+                    X
+                  </button>
                 </td>
               </tr>
             ))}

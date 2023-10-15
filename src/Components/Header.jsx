@@ -9,10 +9,13 @@ const Header = () => {
       <NavLink className="font-medium text-xl" to="/user">
         User
       </NavLink>
+      <NavLink className="font-medium text-xl" to="/addCoffee">
+        AddCoffee
+      </NavLink>
       <NavLink className="font-medium text-xl" to="/singUp">
         SingUp
       </NavLink>
-      <NavLink className="font-medium text-xl" to="/LogIn">
+      <NavLink className="font-medium text-xl" to="/singIn">
         Login
       </NavLink>
     </div>
